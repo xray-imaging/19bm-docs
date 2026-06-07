@@ -18,7 +18,7 @@ sections below map onto cora as follows:
 Section                 Maps to in cora
 ======================  ====================================================
 **Name**                ``Method.name``
-**Devices**             ``Plan.wiring`` targets (Assets from item_020)
+**Devices**             ``Plan.wiring`` targets (Assets from item_001)
 **Preconditions**       Guard clauses checked before the Method runs
 **Parameters**          ``Method.parameters_schema``
 **Steps**               Method body — ideally one atomic action per row
@@ -48,11 +48,11 @@ Devices
 
 *(required — list every Asset / Component this procedure reads
 from or writes to. The first time a Device appears it should link
-back to :doc:`../manual/item_020` so cora can resolve the wiring.)*
+back to :doc:`../manual/item_001` so cora can resolve the wiring.)*
 
-- :doc:`../manual/item_020`: ``<asset_name_1>``
+- :doc:`../manual/item_001`: ``<asset_name_1>``
   (e.g. ``Aerotech_ABRS_rotary``)
-- :doc:`../manual/item_020`: ``<asset_name_2>``
+- :doc:`../manual/item_001`: ``<asset_name_2>``
 
 
 Preconditions

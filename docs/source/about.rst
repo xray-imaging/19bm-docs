@@ -28,7 +28,6 @@ Beamline at a glance
 :Enclosures: 19-BM-A (FOE), 19-BM-C (transport), 19-BM-D (endstation)
 :First light: target 2026-3 beam cycle
 :Beamline scientist: Alan Kastengren (IMG/XSD)
-:Group leader: Francesco DeCarlo (IMG/XSD)
 
 Status
 ------

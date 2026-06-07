@@ -44,18 +44,18 @@ the default new-BM centerline.
 
 Three enclosures:
 
-================  ====================================================
-Enclosure         Role
-================  ====================================================
-**19-BM-A** (FOE) Front-end optics: exit mask, slits, filters,
-                  bremsstrahlung control, gate valve, UHV transport.
-**19-BM-C**       Shielded UHV transport only — beam passes through
-                  entirely in vacuum, no intercepts.
-**19-BM-D**       Endstation. Beryllium window + Kapton window
-                  transition to air, sample stage in air, indirect-
-                  detection imaging system, beam stops at the
-                  downstream wall.
-================  ====================================================
+====================  ====================================================
+Enclosure             Role
+====================  ====================================================
+**19-BM-A** (FOE)     Front-end optics: exit mask, slits, filters,
+                      bremsstrahlung control, gate valve, UHV transport.
+**19-BM-C**           Shielded UHV transport only — beam passes through
+                      entirely in vacuum, no intercepts.
+**19-BM-D**           Endstation. Beryllium window + Kapton window
+                      transition to air, sample stage in air, indirect-
+                      detection imaging system, beam stops at the
+                      downstream wall.
+====================  ====================================================
 
 19-BM-C and 19-BM-D share a downstream-wall guillotine that is
 held open during operation, so they act as a single shielded

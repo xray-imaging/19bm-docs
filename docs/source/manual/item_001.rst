@@ -179,13 +179,44 @@ F3-30 filter unit
 
 :Role: Filter the white beam to the desired spectrum for
    indirect-detection tomography. Selectable combinations of
-   silicon and germanium filter plates modify the transmitted
-   spectrum and reduce heat load on downstream components.
-:Family: Filter (modified F3-30 carriage)
+   silicon, germanium, and copper filter plates modify the
+   transmitted spectrum and reduce heat load on downstream
+   components.
+:Family: Filter (modified F3-30 carriage, reused from 1-ID)
 :Position: 19-BM-A, downstream of the white-beam slits
-:Materials: Si and Ge filter media in selectable carriers
+:Materials: Si, Ge, and Cu filter media in two selectable banks
 :Cooling: water-cooled
 :EPICS prefix: TBD
+:Banks: Per the `Alan Kastengren development notes
+   <https://anl.box.com/s/t1omsvb59zunqap6y4grc4dbg4skbv4u>`__
+   (2026-05-07):
+
+   - **Bank 1:** Open · Si 1000 µm · Ge 330 µm · Ge 830 µm · Cu 2000 µm
+   - **Bank 2:** Open · Si 1000 µm · Ge 500 µm · Ge 1000 µm · *(slot 5 TBD)*
+
+   Combining the two banks gives Si 1000, Si 2000, Ge 330, 500,
+   830, 1000, 1330, 1830, and Cu 2000 µm equivalent thicknesses.
+   There is a deliberate gap between Ge 500 and Ge 830; otherwise
+   the spacing covers the full operational spectrum smoothly.
+
+:Notes:
+   Filter wafers are 2″ diameter; each wafer yields two usable
+   filter pieces. The outer vertical dimension of the F3-30
+   frame that covers the filter is **23 mm**, which sets the
+   maximum cut height for the APS crystal-shop work request.
+   Water plumbing is the original 1-ID arrangement.
+
+.. figure:: ../img/filter_transmission_table.png
+   :width: 80%
+   :align: center
+
+   Calculated mean energy, effective energy, and transmission
+   (true and effective) at the design incident spectrum (mean
+   E = 29.23 keV, effective E = 20.00 keV) for each of the
+   filter options the proposed bank arrangement makes available.
+   Source: `Alan Kastengren development notes
+   <https://anl.box.com/s/t1omsvb59zunqap6y4grc4dbg4skbv4u>`__,
+   2026-05-07.
 
 UHV transport (19-BM-A internal)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

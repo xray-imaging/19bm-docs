@@ -2,6 +2,12 @@
 19-BM Docs
 ==========
 
+.. image:: source/img/FAST_logo.png
+   :width: 50%
+   :align: center
+   :alt: 19-BM-FACT beamline logo
+
+|
 
 Manual and operational information for the APS **19-BM Fast
 Autonomous Computed Tomography (FACT) beamline** at Argonne

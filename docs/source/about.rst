@@ -35,3 +35,9 @@ Status
 As of the FDR (Final Design Report, 6 June 2026), removal of legacy
 19-BM equipment is ongoing. First light in the new beamline
 configuration is anticipated during the 2026-3 beam cycle.
+
+Reference documents
+-------------------
+
+* `Original FACT funding proposal <https://anl.box.com/s/q3jeda5nwcffilrrreyt9515n7gcthy5>`_
+  (Argonne Box — requires ANL login)

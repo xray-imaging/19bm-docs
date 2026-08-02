@@ -39,3 +39,18 @@ Contribute
 
 * `Documentation <https://github.com/xray-imaging/19bm-docs/tree/master/docs>`_
 * `Issue Tracker <https://github.com/xray-imaging/19bm-docs/issues>`_
+
+Useful Links
+------------
+
+
+
+`User login <https://ups.servicenowservices.com/ups>`_
+
+`Admin loging <https://ups.servicenowservices.com/login_locate_sso.do>`_ then enter your anl email address
+
+`Credit for Sector Orientation <https://beam.aps.anl.gov/pls/apsweb/sst_credit.start_page>`_
+
+`ESAF <https://beam.aps.anl.gov/pls/apsweb/esaf0001.start_page>`_
+
+`Safety and Training <https://www.aps.anl.gov/Safety-and-Training>`_

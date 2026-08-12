@@ -13,13 +13,23 @@ used in the 2-BM beamline reference, so cora's ``Equipment`` BC
 can absorb both without a rewrite.
 
 Source of truth for the values below is the **19-BM Final Design
-Report** (Alan Kastengren, IMG/XSD, 6 June 2026), referencing
-ICMS documents:
+Report** (Alan Kastengren, IMG/XSD, 6 June 2026; ICMS
+APS_2388142 / APS_2388143 / APS_2388144), referencing ICMS
+documents:
 
 - PSS User Requirements — APS_1181415
+- PSS User Validation Procedure — APS_1181067
 - BLEPS User Requirements — APS_2388098
 - APSU Bending-magnet thermal waiver — APSU_2286907
 - APS Engineering Standard, Vacuum Designs — APS_2018473
+- Standard APS Beamline Ray Trace Drawings / APS Component
+  Reference Table (CRT) template — APS_1192967
+
+The as-built beam-path description and the plan-view figures below
+are taken from the approved **CRRT Operations Commissioning post
+APS-U – 19-BM** procedure (ICMS APS_2388654, Rev 1, issued
+2026-08-11) — see :doc:`../ops/item_002`. Where the CRRT and the
+FDR differ, the CRRT is the later document.
 
 .. warning::
 
@@ -57,9 +67,37 @@ Enclosure             Role
                       downstream wall.
 ====================  ====================================================
 
-19-BM-C and 19-BM-D share a downstream-wall guillotine that is
-held open during operation, so they act as a single shielded
-enclosure from a radiation-safety perspective.
+The guillotine that previously surrounded the transport pipe
+between 19-BM-C and 19-BM-D **has been removed**, so the two
+cannot be treated as separate enclosures from a shielding
+perspective — they act as a single shielded volume. (Distinct
+from the two 12 mm Pb guillotines inside the *downstream* wall of
+19-BM-D, which remain.)
+
+Layout
+------
+
+.. figure:: ../img/19bm_plan_view_upstream.png
+   :width: 100%
+   :align: center
+
+   Plan view, upstream half: the ratchet-wall penetration and the
+   19-BM-A first optics enclosure, with the floor scale in metres
+   from the source. Beam travels left to right.
+
+.. figure:: ../img/19bm_plan_view_downstream.png
+   :width: 100%
+   :align: center
+
+   Plan view, downstream half: 19-BM-C (transport only) and the
+   19-BM-D endstation, ending at the photon and bremsstrahlung
+   stops at the downstream wall. The centre of 19-BM-D is
+   approximately 53 m from the source.
+
+Both panels are Figure 1 of the CRRT operations commissioning
+procedure (ICMS ``APS_2388654``); see
+:doc:`../ops/item_002`. The two panels are drawn at slightly
+different scales — read positions off each panel's own ruler.
 
 Physical walk, source to beam stop (approximate distances, from
 the storage-ring source)::
@@ -72,6 +110,7 @@ the storage-ring source)::
      -> F3-30 filter unit                  (Si + Ge filter media)
      -> UHV transport
      -> Gate valve                         (vacuum isolation; isolates 19-BM-A from C/D)
+     -> Temporary Be window                (commissioning only, near the downstream end of 19-BM-A)
      -> Bremsstrahlung collimator A359-K2  (reused from previous 19-BM)
      -> Shielded UHV transport             (19-BM-A → 19-BM-C)
      -> UHV transport                      (through 19-BM-C, no intercepts)
@@ -204,7 +243,17 @@ F3-30 filter unit
    filter pieces. The outer vertical dimension of the F3-30
    frame that covers the filter is **23 mm**, which sets the
    maximum cut height for the APS crystal-shop work request.
-   Water plumbing is the original 1-ID arrangement.
+   Water plumbing is the original 1-ID arrangement. All filters
+   can be removed from the beam.
+
+   .. note::
+
+      **To reconcile.** The CRRT procedure (``APS_2388654`` §6)
+      states the maximum filtering available is **1.5 mm Cu per
+      filter bank**, while the bank loadout above (development
+      notes, 2026-05-07) gives Cu 2000 µm in Bank 1. Either the
+      loadout changed after May 2026 or one figure is approximate
+      — confirm with A. Kastengren before relying on either.
 
 .. figure:: ../img/filter_transmission_table.png
    :width: 80%
@@ -243,6 +292,24 @@ Gate valve
 :Interlocks: vacuum sensors (open below threshold) + BLEPS
    coordination with the FE exit valve
 
+Temporary Be window (commissioning only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:Role: Lets the shielded 19-BM-A → 19-BM-C transport be filled
+   with gas while the upstream 19-BM-A components stay under UHV.
+   Installed for shielding verification of the transport, which is
+   tested first evacuated and then back-filled with 1 atm of dry
+   nitrogen.
+:Family: Window (temporary)
+:Material: Beryllium
+:Position: 19-BM-A, near the downstream end, upstream of the
+   second bremsstrahlung collimator
+:Lifetime: **Commissioning only** — not part of the operational
+   beamline
+:Notes: Because this window sits in white beam with fill gas
+   present, the transport must be filled with **dry nitrogen, not
+   air**. Source: CRRT procedure ``APS_2388654`` §2 and §8.
+
 Bremsstrahlung collimator (downstream)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -265,10 +332,10 @@ Bremsstrahlung collimator (downstream)
 :Vacuum: UHV throughout, ion-pumped, no water-to-vacuum joints
 :Intercepts: none — the beam passes through 19-BM-C entirely
    inside the transport tube.
-:Notes: 19-BM-C and 19-BM-D share a guillotine on their dividing
-   wall that is held open during operation, so the two enclosures
-   act as a single shielded volume from a radiation-safety
-   perspective.
+:Notes: The guillotine that previously surrounded the transport
+   pipe on the 19-BM-C / 19-BM-D dividing wall has been removed,
+   so the two enclosures act as a single shielded volume from a
+   radiation-safety perspective (CRRT ``APS_2388654`` §2).
 
 
 .. _19-bm-d-endstation:
@@ -421,8 +488,12 @@ References
 ==========
 
 - 19-BM FACT Beamline **Final Design Report**, 6 June 2026
-  (Alan Kastengren, IMG/XSD; reviewed F. DeCarlo, IMG/XSD).
-  [ICMS document number TBD per PDRC chair.]
+  (Alan Kastengren, IMG/XSD; reviewed F. DeCarlo, IMG/XSD) —
+  ICMS **APS_2388142**, **APS_2388143**, **APS_2388144**.
+- **APS_2388654** — CRRT Operations Commissioning post APS-U –
+  19-BM (Rev 1, issued 2026-08-11); see :doc:`../ops/item_002`.
+- **APS_2388655** — Request to Authorize Operations Commissioning
+  for 19-BM, including the Pre-Readiness Review Report.
 - **APS_1181415** — 19-BM Personnel Safety System (PSS) User
   Requirements Specification.
 - **APS_2388098** — 19-BM Beamline Equipment Protection System

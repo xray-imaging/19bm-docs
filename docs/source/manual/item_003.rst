@@ -12,7 +12,7 @@ user interface (GUI) or from Python using
 
 To start the main 19-BM tomography control screen, run::
 
-  [factuser@orco ~]$ start_tomo
+  [factuser@radon ~]$ start_tomo
 
 .. image:: ../img/mct_main.png
    :width: 720px
@@ -37,10 +37,16 @@ To start the main 19-BM tomography control screen, run::
    of those is blank, the IOC behind it is down. Use the ``IOCs``
    button to check, start or stop it.
 
-Run it from ``orco`` rather than from another machine. ``start_tomo``
-launches MEDM locally, and the buttons on the screen run their commands
-wherever MEDM is running — so starting it elsewhere would put the
-detector viewer and the camera image stream on that machine instead.
+``radon`` is the machine users run experiments from, and is where the
+screen is normally opened. It is on the public network; the IOCs it
+talks to are on the private one, reached through the sector gateway.
+
+Note that MEDM runs each button's command on whatever machine MEDM
+itself is running on. Opening the screen on ``radon`` therefore also
+puts ImageJ and the camera image stream there, which is the intended
+arrangement — but it does mean full frames cross the network from
+``orco``. If that ever becomes a bottleneck, opening the screen on
+``orco`` keeps the stream local to the machine holding the camera.
 
 
 What the screen provides

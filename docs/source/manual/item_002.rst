@@ -50,6 +50,15 @@ fault until manually cleared).
    loop in series**, a single loss-of-flow event trips both
    protections at once — see :doc:`item_001`.
 
+All of it is published over EPICS and shown on the BLEPS status
+screen, reached from the ``BLEPS`` button on the tomography screen
+(see :doc:`item_003`):
+
+.. image:: ../img/BLEPS.png
+   :width: 560px
+   :align: center
+   :alt: BLEPS
+
 
 Response to a fault
 ===================

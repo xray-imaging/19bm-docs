@@ -10,9 +10,7 @@ and ESAF users over Globus, and updates the tomoscan user-info PVs.
 
 .. note::
 
-   Run DMagic from **radon**. ``/dm/19bm`` is mounted there but not on
-   txmthree, so the Data Management subcommands fail elsewhere with
-   ``Username None does not exist``. See `Where it runs`_.
+   Run DMagic from **radon**, the 19-BM production console.
 
 
 Everyday use
@@ -36,28 +34,6 @@ the MEDM screen if the scheduling system does not have what you need.
 If the tomoscan prefix ever needs overriding::
 
   (dm) [factuser@radon]$ dmagic show --tomoscan-prefix 19bm:TomoScan: --set 0
-
-
-Where it runs
-=============
-
-Only radon has the site DM installation mounted:
-
-+-------------------------------------------+-------+----------+
-| path                                      | radon | txmthree |
-+===========================================+=======+==========+
-| ``/dm``                                   | yes   | yes      |
-+-------------------------------------------+-------+----------+
-| ``/dm/19bm/etc``, ``production``, ``opt`` | yes   | **no**   |
-+-------------------------------------------+-------+----------+
-
-``DM_LOGIN_FILE`` points at ``/dm/19bm/etc/.user19bm.system.login``, so on
-txmthree the SDK cannot authenticate and every DM subcommand fails. The
-subcommands that use the APS scheduling REST API instead -- ``show``,
-``tag``, ``list-beamtimes``, ``list-esafs`` -- work from either host.
-
-radon is the 19-BM production console, so in normal operation this
-distinction does not arise.
 
 
 Subcommands

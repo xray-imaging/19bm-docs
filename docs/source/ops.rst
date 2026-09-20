@@ -2,9 +2,9 @@
 Operation
 =========
 
-Beamline-operation instructions for 19-BM-FACT will live here as the
-endstation is commissioned. Operational walkthroughs are still to be
-written — see :doc:`manual` for the hardware reference.
+Beamline-operation instructions for 19-BM-FACT, added as the endstation is
+commissioned. Coverage is still partial — see :doc:`manual` for the
+hardware reference.
 
 .. toctree::
    :glob:

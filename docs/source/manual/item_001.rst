@@ -245,10 +245,30 @@ White-beam slits
    (away from the ring centre), negative X is inboard (toward the
    ring centre).
 
-Unlike the 2-BM L3 slits, there are as yet no composite
-``Size`` / ``Center`` calc records at 19-BM: the four blades are
-driven individually. The motors are slots on the ``19bmSoft``
-soft IOC.
+The four blades can be driven individually, or through the
+composite records of the synApps slit device, which are loaded on
+the ``19bmSoft`` soft IOC alongside the motors:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 30 70
+
+      * - Record
+        - Meaning
+      * - ``19bmSoft:Slit1Hsize``
+        - Horizontal aperture, mm (outboard/inboard pair)
+      * - ``19bmSoft:Slit1Hcenter``
+        - Horizontal centre, mm
+      * - ``19bmSoft:Slit1Vsize``
+        - Vertical aperture, mm (top/bottom pair)
+      * - ``19bmSoft:Slit1Vcenter``
+        - Vertical centre, mm
+      * - ``19bmSoft:Slit1Hsync``, ``Slit1Vsync``
+        - Re-read the blade positions into the composite records
+
+Writing ``Size`` or ``Center`` moves both blades of that pair
+together. The individual motors remain available for aligning one
+blade at a time.
 
 F3-30 filter unit
 ~~~~~~~~~~~~~~~~~

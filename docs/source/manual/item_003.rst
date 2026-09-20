@@ -19,6 +19,24 @@ To start the main 19-BM tomography control screen, run::
    :align: center
    :alt: mct_main
 
+.. note::
+
+   At 2-BM a white field means the corresponding IOC is not running.
+   **At 19-BM that is not always the case** — some panels are blank by
+   design, because the hardware is not installed yet.
+
+   Panels labelled ``19bmTODO:`` are placeholders: the hexapod being
+   moved from 7-BM, and the X/Z centering pair that sits on top of the
+   rotary stage. They are deliberately pointed at a prefix that does
+   not exist, so that they show as disconnected rather than silently
+   attaching to the wrong motor. They will connect once that hardware
+   is racked and assigned a prefix.
+
+   Panels naming a real prefix — ``19bmSoft:``, ``19bmVieworks:``,
+   ``19bm:TomoScan:``, ``19bm:BLEPS:`` — *should* be populated. If one
+   of those is blank, the IOC behind it is down. Use the ``IOCs``
+   button to check, start or stop it.
+
 Run it from ``orco`` rather than from another machine. ``start_tomo``
 launches MEDM locally, and the buttons on the screen run their commands
 wherever MEDM is running — so starting it elsewhere would put the
@@ -51,6 +69,13 @@ What the screen provides
    * - Bottom
      - Motor panels: the rotation stage, the four white-beam slit
        blades, and placeholders for stages not yet installed.
+
+.. warning::
+
+   The white-beam slit panels are full motor controls, not readouts.
+   They drive the four blades of the 19-BM-A white-beam slits directly,
+   and the same motors also sit behind the ``Slit1H`` / ``Slit1V``
+   size-and-centre records, so a blade moved here changes those too.
 
 
 BLEPS
@@ -130,32 +155,3 @@ Set the channel name to ``19bmVieworks:Pva1:Image`` and press **Start**:
    Vieworks frame is 9568 x 6380 x 2 = 122 MB — larger than the Channel
    Access array limit in use here. pvAccess has no such limit, which is
    why the channel to open is ``Pva1:Image`` rather than ``image1``.
-
-
-Blank panels
-============
-
-.. note::
-
-   At 2-BM a white field means the corresponding IOC is not running.
-   **At 19-BM that is not always the case** — some panels are blank by
-   design, because the hardware is not installed yet.
-
-   Panels labelled ``19bmTODO:`` are placeholders: the hexapod being
-   moved from 7-BM, and the X/Z centering pair that sits on top of the
-   rotary stage. They are deliberately pointed at a prefix that does
-   not exist, so that they show as disconnected rather than silently
-   attaching to the wrong motor. They will connect once that hardware
-   is racked and assigned a prefix.
-
-   Panels naming a real prefix — ``19bmSoft:``, ``19bmVieworks:``,
-   ``19bm:TomoScan:``, ``19bm:BLEPS:`` — *should* be populated. If one
-   of those is blank, the IOC behind it is down. Use the ``IOCs``
-   button to check, start or stop it.
-
-.. warning::
-
-   The white-beam slit panels are full motor controls, not readouts.
-   They drive the four blades of the 19-BM-A white-beam slits directly,
-   and the same motors also sit behind the ``Slit1H`` / ``Slit1V``
-   size-and-centre records, so a blade moved here changes those too.

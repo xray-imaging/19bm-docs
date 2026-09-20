@@ -84,6 +84,44 @@ What the screen provides
    size-and-centre records, so a blade moved here changes those too.
 
 
+IOCs
+====
+
+The ``IOCs`` button opens a small panel for starting and stopping the
+software behind the screen:
+
+.. image:: ../img/ioc_control.png
+   :width: 560px
+   :align: center
+   :alt: ioc_control
+
+One row per process. The wide button in the middle starts it, the red
+``Stop`` on the left stops it, and the field on the right reports its
+state:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Row
+     - What it runs
+   * - Vieworks 61MP IOC
+     - The camera IOC, on ``orco``
+   * - TomoScan IOC
+     - The tomoScan soft IOC, on ``orco``
+   * - TomoScan server
+     - The Python server that drives it — reads *Running* when up
+   * - Hexapod IOC
+     - **Not yet in service.** The hexapod is still to be moved from
+       7-BM and has no address assigned, so this row stays blank and
+       its buttons do nothing.
+
+This is the panel to reach for when a field on the main screen is
+blank and the prefix is a real one — see the note under the screenshot
+at the top of this page for which blanks are expected and which are
+not.
+
+
 BLEPS
 =====
 

@@ -211,7 +211,44 @@ White-beam slits
    collimator
 :Cooling: water-cooled (intercepts white beam; APSU BM thermal-
    waiver scope)
-:EPICS prefix: TBD
+:Reference drawing: ``A375-SL0100`` (slit assembly, released
+   2026-05-15). Blades are tantalum (``A375-SL0102``, 28 × 10 ×
+   2 mm) in a C18150 copper-alloy body (``A375-SL0101``), with
+   1/4 NPT / 3-8 tube water fittings. Assembly envelope
+   212 × 127 mm, approximately 10 kg.
+
+   The drawing's title block reads *BEAMLINE 35-BM / S35 BM
+   BEAMLINE DESIGN*. That is correct and not a filing error: the
+   slit design is shared between 35-BM and 19-BM, and the two
+   assemblies are identical.
+:As-built drawings: https://anl.box.com/s/cbf065qntml0sm94nvlkppj5ezl7fxkj
+:EPICS prefix: ``19bmSoft:`` (four independent blade motors)
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 25 75
+
+      * - Motor
+        - Blade
+      * - ``19bmSoft:m1``
+        - White-beam slit **outboard** blade
+      * - ``19bmSoft:m2``
+        - White-beam slit **top** blade
+      * - ``19bmSoft:m3``
+        - White-beam slit **inboard** blade
+      * - ``19bmSoft:m4``
+        - White-beam slit **bottom** blade
+
+.. note::
+
+   "Inboard" follows the APS X convention: positive X is outboard
+   (away from the ring centre), negative X is inboard (toward the
+   ring centre).
+
+Unlike the 2-BM L3 slits, there are as yet no composite
+``Size`` / ``Center`` calc records at 19-BM: the four blades are
+driven individually. The motors are slots on the ``19bmSoft``
+soft IOC.
 
 F3-30 filter unit
 ~~~~~~~~~~~~~~~~~
@@ -225,18 +262,51 @@ F3-30 filter unit
 :Position: 19-BM-A, downstream of the white-beam slits
 :Materials: Si, Ge, and Cu filter media in two selectable banks
 :Cooling: water-cooled
-:EPICS prefix: TBD
-:Banks: Per the `Alan Kastengren development notes
-   <https://anl.box.com/s/t1omsvb59zunqap6y4grc4dbg4skbv4u>`__
-   (2026-05-07):
+:EPICS prefix: ``19bmSoft:`` — bank 1 is ``19bmSoft:m5``
+   (description *Filter Upstream*), bank 2 is ``19bmSoft:m6``
+   (*Filter Downstream*). Each motor drives one bank through its
+   five positions.
+:Banks: As installed, listed from the **bottom** position upward:
 
-   - **Bank 1:** Open · Si 1000 µm · Ge 330 µm · Ge 830 µm · Cu 2000 µm
-   - **Bank 2:** Open · Si 1000 µm · Ge 500 µm · Ge 1000 µm · *(slot 5 TBD)*
+   .. list-table::
+      :header-rows: 1
+      :widths: 12 44 44
 
-   Combining the two banks gives Si 1000, Si 2000, Ge 330, 500,
-   830, 1000, 1330, 1830, and Cu 2000 µm equivalent thicknesses.
-   There is a deliberate gap between Ge 500 and Ge 830; otherwise
-   the spacing covers the full operational spectrum smoothly.
+      * - Slot
+        - Bank 1 — ``19bmSoft:m5``
+        - Bank 2 — ``19bmSoft:m6``
+      * - 1 (bottom)
+        - Open
+        - Open
+      * - 2
+        - Si 1000 µm
+        - Si 1000 µm
+      * - 3
+        - Si 1000 µm + Ge 330 µm
+        - Ge 830 µm
+      * - 4
+        - Si 1000 µm + Ge 500 µm
+        - Ge 1000 µm
+      * - 5
+        - Cu 2000 µm
+        - Cu 2000 µm
+
+   Note the germanium in bank 1 is **stacked behind Si 1000 µm in
+   the same slot**, so Ge 330 and Ge 500 are not available without
+   the accompanying silicon. Bare Ge is only on bank 2.
+
+.. note::
+
+   **This supersedes the loadout previously recorded here**, taken
+   from the `Alan Kastengren development notes
+   <https://anl.box.com/s/t1omsvb59zunqap6y4grc4dbg4skbv4u>`__ of
+   2026-05-07, which listed bank 1 as Open / Si 1000 / Ge 330 /
+   Ge 830 / Cu 2000 and bank 2 as Open / Si 1000 / Ge 500 /
+   Ge 1000 / *TBD*. Two things changed: the Ge 330 and Ge 500
+   plates moved to bank 1 stacked behind silicon, and bank 2 slot 5
+   — previously undecided — is Cu 2000 µm. The transmission figure
+   below was calculated against the May 2026 arrangement and has
+   not been recomputed for the installed one.
 
 :Notes:
    Filter wafers are 2″ diameter; each wafer yields two usable
@@ -248,12 +318,13 @@ F3-30 filter unit
 
    .. note::
 
-      **To reconcile.** The CRRT procedure (``APS_2388654`` §6)
-      states the maximum filtering available is **1.5 mm Cu per
-      filter bank**, while the bank loadout above (development
-      notes, 2026-05-07) gives Cu 2000 µm in Bank 1. Either the
-      loadout changed after May 2026 or one figure is approximate
-      — confirm with A. Kastengren before relying on either.
+      **Resolved 2026-09-19.** The CRRT procedure
+      (``APS_2388654`` §6) states the maximum filtering available
+      is **1.5 mm Cu per filter bank**, while the installed
+      loadout gives Cu 2000 µm in both banks. The installed 2 mm
+      plates are the ones in use and are approved for use; the
+      1.5 mm figure in the procedure text does not reflect the
+      as-built loadout.
 
 .. figure:: ../img/filter_transmission_table.png
    :width: 80%
@@ -389,7 +460,65 @@ Sample stage (TBD)
 :EPICS prefix: TBD
 :Notes: Detailed design of the sample manipulator and the future
    robotic sample-changer is out of FDR scope; this section will
-   be expanded as the endstation is commissioned.
+   be expanded as the endstation is commissioned. The rotary
+   stage is installed and reads back as ``19bmSoft:aero:m1``; the
+   centering stage below is mounted but not yet wired.
+
+Centering stage (SampleTop X–Z)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:Role: Centre the sample on the rotation axis. Sits **on top of**
+   the rotary and co-rotates with theta, so the motion is in the
+   rotating frame, not the lab frame. Operationally the pair is
+   the "0/180" and "90/270" stage: each axis lies along the beam
+   at those rotation angles, which is what makes them the axes you
+   adjust when removing runout of the sample about theta.
+
+   This is a different job from the sample X and Y translations,
+   which sit **under** the rotary and are provided by the hexapod.
+   Those move the whole sample assembly in the lab frame — notably
+   clear of the beam for flat fields — and do not co-rotate.
+:Family: LinearStage
+:Model: Kohzu **CYAT-070** alignment stage, 80 × 80 mm table,
+   ball-screw lead 1.0 mm. Same model as the 2-BM SampleTop_X and
+   SampleTop_Z stages.
+:Mounted on: Rotary stage (``19bmSoft:aero:m1``)
+:Carries: (sample)
+:Travel: ±15 mm
+:Resolution: 1 / 0.5 / 0.05 µm (full / half / 1-20 microstep)
+:Max speed: 5 mm/s
+:Repeatability: ≤±0.5 µm
+:Lost motion: ≤2 µm
+:Backlash: ≤1 µm
+:Straightness: ≤3 µm / 30 mm (horizontal and vertical)
+:Load capacity: 98 N (10 kgf)
+:Weight: 1.7 kg
+:Motor: Oriental Motor PK523HPMB-C4 five-phase stepper
+   (0.75 A per phase, 0.36° basic step); F-115 home and limit
+   sensors; Hirose RP13A-12JG-20PC connector
+:Datasheet: https://www.kohzuprecision.com/products/alignment-stages/item/cyat-070/
+   — a copy is filed at
+   https://anl.box.com/s/tqb4nhw3cbroxw89mmh6gver9zjwaica
+:EPICS: **not yet assigned.** The stage is mounted but is not
+   wired to a controller, so it has no motor record yet.
+
+   Note this is *not* what tomoscan's ``SAMPLE_X`` / ``SAMPLE_Y``
+   bind to. Those are the under-rotary translations and are bound
+   to the hexapod (see the `19-BM Micro-CT Tomoscan page
+   <https://img.xray.aps.anl.gov/source/internal/19bm/Micro-CT/manual/microct_003.html>`__
+   in the imaging internal documentation). Centering-stage motion has no
+   tomoscan binding at all — it is set by hand before a scan, not
+   driven during one.
+
+.. figure:: ../img/CYAT-070.jpg
+   :width: 480px
+   :align: center
+   :alt: Kohzu CYAT-070 crossed-roller alignment stage
+
+   Kohzu CYAT-070. Two of these, stacked X over Z, form the
+   centering stage on top of the rotary. Each is driven by a
+   five-phase stepper with home and limit sensors; neither is
+   wired at 19-BM yet.
 
 Detector — indirect-detection imaging system (TBD)
 --------------------------------------------------

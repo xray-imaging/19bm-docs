@@ -155,21 +155,166 @@ scripts from another beamline:
 A ``PLC_Battery_Dead_Wrn`` warning channel is enabled at 19-BM.
 
 
-Not yet documented
-==================
+Flow channel assignment
+=======================
 
-Two things are deliberately absent from this page because they
-are not carried in the transfer table:
+The transfer table refers to the cooling loops only by index
+(``Flow1``..``Flow6``); which physical component each index
+monitors is configured in the PLC and shown on the Allen-Bradley
+operator panel rather than in the spreadsheet. Read off that
+panel on 2026-09-17, with a spot reading of the EPICS values two
+days later for confirmation:
 
-- **Physical assignment of the flow channels.** The table refers
-  to the cooling loops only by index (``Flow1``..``Flow6``). Which
-  physical component each index monitors is configured in the PLC
-  and read off the Allen-Bradley operator panel, not the
-  spreadsheet.
-- **EPICS IOC deployment.** Host, account, IOC directory,
-  concrete PV prefix and the start / stop wrapper scripts are a
-  property of the soft IOC that bridges the PLC to Channel
-  Access, and are not part of the PLC tag set.
+.. list-table::
+   :header-rows: 1
+   :widths: 12 16 34 12 13 13
+
+   * - Index
+     - Meter
+     - Service
+     - Station
+     - Panel
+     - EPICS
+   * - ``Flow1``
+     - Ultrasonic
+     - White-beam slits
+     - 19-BM-A
+     - 1.09
+     - 1.07
+   * - ``Flow2``
+     - Ultrasonic
+     - Filter unit
+     - 19-BM-A
+     - 0.73
+     - 0.71
+   * - ``Flow3``
+     - Ultrasonic
+     - Be window / white beam stop
+     - 19-BM-D
+     - 0.82
+     - 0.81
+   * - ``Flow4``
+     - Yokogawa
+     - White-beam slits
+     - 19-BM-A
+     - 1.19
+     - 1.18
+   * - ``Flow5``
+     - Yokogawa
+     - Filter unit
+     - 19-BM-A
+     - 0.75
+     - 0.75
+   * - ``Flow6``
+     - Yokogawa
+     - Be window / white beam stop
+     - 19-BM-D
+     - 0.89
+     - 0.88
+
+.. important::
+
+   ``Flow4``..``Flow6`` are a **second set of meters on the same
+   three services** as ``Flow1``..``Flow3`` — Yokogawa rather than
+   ultrasonic — and the operator panel shows all three as
+   *Disabled*. Their PVs exist and track the flow, so they are
+   useful as a cross-check, but equipment protection rests on the
+   three ultrasonic channels.
+
+   All six report ``FLOWn_SET_POINT`` = 0.53 gpm. On the disabled
+   channels that value is populated but not acted on, so do not
+   read a set point as evidence that a channel interlocks.
+
+``Flow3`` / ``Flow6`` monitor the single series loop described in
+*What BLEPS monitors* above: the Be window and the downstream
+photon stop ``A359-M100`` share one circuit, so one channel covers
+both. The panel labels that service *Be Window / WBS*.
+
+.. note::
+
+   The panel presents three cooling services, while *What BLEPS
+   monitors* lists four water-cooled components in the beam path —
+   the exit mask ``A359-M20`` is not one of the three. Whether the
+   mask shares the slit or filter loop, or is protected some other
+   way, is answered by neither the panel nor the transfer table.
+
+
+EPICS IOC deployment
+====================
+
+A soft IOC bridges the PLC to Channel Access. It is a property of
+that IOC rather than of the PLC, so none of the detail below comes
+from the transfer table.
+
+.. list-table::
+   :widths: 26 74
+
+   * - IOC directory
+     - ``/net/s19dserv/xorApps/epics/synApps_6_3/ioc/19bmBLEPS/``
+   * - Host
+     - ``hounsfield``
+   * - Directory owner
+     - ``tfanning`` / ``aesbc`` — the controls group
+   * - Runs as
+     - ``factuser``, in a detached ``screen`` session named
+       ``19bmBLEPS``
+   * - PLC
+     - Allen-Bradley at ``10.54.129.19``, read over EtherIP
+   * - PV prefix
+     - ``19bm:BLEPS:``
+   * - Start / stop
+     - ``softioc/19bmBLEPS.pl`` in the IOC directory
+
+Start it with ``./19bmBLEPS.pl start`` from the ``softioc``
+directory. That opens the screen session, runs ``run``, and tees
+the console to ``softioc/logs/iocConsole/``. ``./19bmBLEPS.pl
+status`` reports the pid, ``stop`` ends it and ``console``
+attaches to the running shell (detach again with ``^a d`` — do
+not press ``^c``, which stops the IOC).
+
+.. important::
+
+   **The IOC does not start at boot.** There is no systemd unit
+   and no ``@reboot`` entry for it; it is started by hand and
+   lives only as long as the screen session and the host. If
+   ``hounsfield`` reboots, every ``19bm:BLEPS:`` PV disappears
+   until somebody starts it again.
+
+   Equipment protection itself is unaffected by this. The
+   interlocks are executed by the PLC, which runs independently;
+   the IOC only publishes a *view* of them over Channel Access. A
+   dead IOC means blind monitoring, not unprotected equipment.
+
+The prefix repays attention, because the IOC defines two of them.
+``settings.iocsh`` sets ``PREFIX`` to ``19bmBLEPS:``, which names
+only the housekeeping records (iocStats, autosave, alive), and
+``BLEPS_PREFIX`` to ``19bm:``, which ``bleps.iocsh`` hands to
+``dbLoadTemplate``. Every BLEPS signal is therefore
+``19bm:BLEPS:<base name in caps>``, with the ``BLEPS:`` carried in
+the substitutions file rather than in the prefix. The
+``BL:$(xx)$(yy):`` template recorded in the Excel master is the
+PLC team's naming convention and is **not** the deployed name.
+
+.. note::
+
+   A beamline that loads the same substitutions with
+   ``P=$(PREFIX)`` instead ends up with the prefix doubled --
+   2-BM's records are ``2bmBLEPS:BLEPS:``. When porting a screen
+   or a script from there, the mapping is
+   ``2bmBLEPS:BLEPS:X`` to ``19bm:BLEPS:X``.
+
+The IOC sits on the private network, so a public-network machine
+needs the sector gateway ``s19pvgate`` (``164.54.129.12``) in its
+``EPICS_CA_ADDR_LIST`` to see these PVs.
+
+.. warning::
+
+   This IOC serves equipment protection for the whole beamline and
+   runs on a different host from the tomography IOCs, under the
+   controls group's account. Do not wire start / stop buttons for
+   it into an instrument screen. A BLEPS screen copied from
+   another beamline may carry exactly such buttons, still pointing
+   at *that* beamline's host and account.
 
 
 BLEPS PV inventory (19-BM)

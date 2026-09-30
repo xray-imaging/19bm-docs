@@ -137,7 +137,7 @@ valve states, the 19-BM-A gate valve, the three cooling-water flows,
 and the ion pumps and ion gauges. ``FAULT`` and ``TRIP`` can be
 acknowledged here once the underlying condition has cleared.
 
-See :doc:`item_002` for what BLEPS protects, the fault and trip
+See `BLEPS <https://img.xray.aps.anl.gov/source/internal/19bm/bleps.html>`__ for what BLEPS protects, the fault and trip
 thresholds, and the full PV inventory.
 
 .. note::

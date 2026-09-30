@@ -30,7 +30,6 @@ Content
    source/about
    source/manual
    source/ops
-   source/procedures
    source/publications
    source/links
 

@@ -12,7 +12,7 @@ user interface (GUI) or from Python using
 
 To start the main 19-BM tomography control screen, run::
 
-  [factuser@radon ~]$ start_tomo
+  [factuser@hounsfield ~]$ start_tomo
 
 .. image:: ../img/mct_main.png
    :width: 720px
@@ -25,28 +25,43 @@ To start the main 19-BM tomography control screen, run::
    **At 19-BM that is not always the case** — some panels are blank by
    design, because the hardware is not installed yet.
 
-   Panels labelled ``19bmTODO:`` are placeholders: the hexapod being
-   moved from 7-BM, and the X/Z centering pair that sits on top of the
-   rotary stage. They are deliberately pointed at a prefix that does
-   not exist, so that they show as disconnected rather than silently
-   attaching to the wrong motor. They will connect once that hardware
-   is racked and assigned a prefix.
+   The hexapod moved from 7-BM in October 2026 and is now ``19bmHXP:``;
+   the centering pair on top of the rotary is ``19bmSoft:m21`` and
+   ``m22``. Both were placeholders (``19bmTODO:``) until then, and any
+   panel still naming that prefix is one whose hardware has not arrived.
 
    Panels naming a real prefix — ``19bmSoft:``, ``19bmVieworks:``,
    ``19bm:TomoScan:``, ``19bm:BLEPS:`` — *should* be populated. If one
    of those is blank, the IOC behind it is down. Use the ``IOCs``
    button to check, start or stop it.
 
-``radon`` is the machine users run experiments from, and is where the
-screen is normally opened. It is on the public network; the IOCs it
-talks to are on the private one, reached through the sector gateway.
+.. important::
+
+   Open the screen on ``hounsfield``, not on ``radon``.
+
+   ``hounsfield`` sits on the private beamline subnet (10.54.129.x)
+   alongside the IOCs, so its Channel Access searches are broadcast and
+   reach every IOC. ``radon`` is on the public network and must address
+   the IOC host by unicast -- and because ``19bmVieworks`` and
+   ``tomoScanApp`` both run on ``orco`` and both bind CA search port
+   5064, the kernel delivers each unicast search to only one of them.
+   Roughly half the searches therefore reach the wrong IOC and time out,
+   so panels go blank at random, differently on each restart. Measured
+   from ``radon``: 7 of 14 searches succeeded for each IOC. From
+   ``hounsfield``: 14 of 14.
+
+   This is why a blank panel is not by itself proof that an IOC is down.
 
 Note that MEDM runs each button's command on whatever machine MEDM
-itself is running on. Opening the screen on ``radon`` therefore also
-puts ImageJ and the camera image stream there, which is the intended
-arrangement — but it does mean full frames cross the network from
-``orco``. If that ever becomes a bottleneck, opening the screen on
-``orco`` keeps the stream local to the machine holding the camera.
+itself is running on. Opening the screen on ``hounsfield`` therefore
+also puts ImageJ and the camera image stream there. Full frames still
+cross the network from ``orco``; if that ever becomes a bottleneck,
+opening the screen on ``orco`` keeps the stream local to the machine
+holding the camera.
+
+One exception: DMagic's Data Management subcommands need ``/dm/19bm``,
+which is mounted on ``radon`` but not on ``hounsfield``. Run those from
+``radon`` -- see :doc:`../ops/item_003`.
 
 
 What the screen provides

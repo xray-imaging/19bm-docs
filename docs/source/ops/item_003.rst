@@ -10,7 +10,10 @@ and ESAF users over Globus, and updates the tomoscan user-info PVs.
 
 .. note::
 
-   Run DMagic from **radon**, the 19-BM production console.
+   Run DMagic from **radon**. The Data Management subcommands need
+   ``/dm/19bm``, which is mounted there but not on ``hounsfield`` --
+   so this is the one task that does not move with the control screen,
+   which is opened on ``hounsfield`` (see :doc:`../manual/item_003`).
 
 
 Everyday use

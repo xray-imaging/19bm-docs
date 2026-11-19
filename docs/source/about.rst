@@ -26,15 +26,20 @@ Beamline at a glance
 :Horizontal acceptance: 0.8 mrad
 :Centerline offset: 0.4 mrad inboard of the default new BM centerline
 :Enclosures: 19-BM-A (FOE), 19-BM-C (transport), 19-BM-D (endstation)
-:First light: target 2026-3 beam cycle
+:Status: scientific commissioning
 :Beamline scientist: Alan Kastengren (IMG/XSD)
 
 Status
 ------
 
-As of the FDR (Final Design Report, 6 June 2026), removal of legacy
-19-BM equipment is ongoing. First light in the new beamline
-configuration is anticipated during the 2026-3 beam cycle.
+The beamline is in **scientific commissioning**: it takes beam, the
+endstation is assembled and tomographic data is being collected, while
+the instrument and its procedures are still being characterised and
+tuned. It is not yet in routine user operation.
+
+Two detectors are installed and both are available -- a Vieworks
+VP-61MX and a Hamamatsu ORCA Fire. See :doc:`manual/item_003` for
+running a scan.
 
 Reference documents
 -------------------

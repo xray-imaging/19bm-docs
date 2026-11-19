@@ -92,22 +92,26 @@ A GUP number of ``0`` means internal beamtime rather than a user proposal.
    What follows is the state as of commissioning, not a description of
    routine operation.
 
-Sojourner is **not** directly mounted at 19-BM -- ``dm-direct-mount = False``
-in ``~/dmagic.conf``, and no host checked (radon, tomo3) has ``/gdata``.
-Data therefore reaches Sojourner through ``dmagic daq-start`` or
-``dmagic upload``, not by copying to ``/gdata``.
+Current state, as of 2026-11-18:
 
-Current state:
+- ``/gdata`` **is** mounted on ``factdetector`` (``nvgerfs``, 23 P), and
+  the camera IOC writes straight into the experiment directory::
 
-- The camera IOC writes to ``/local/vieworks_test`` on the detector host.
-  This is a commissioning path, not a data path.
-- ``/data2/19BM`` exists on **tomo3** (``tomodata2-ib:/data2``, 253 T, 43 %
-  used) and is empty. This is the configured ``data-top-dir``.
-- ``tomo3`` is the configured ``data-host``. It has Infiniband-fast access
-  to ``/data2`` but no ``/gdata``.
+      /gdata/dm/19BM/<yyyy-mm>/<yyyy-mm>-<PIlastname>-<GUP#>/data/
 
-Settling the staging route between the detector host and ``/data2/19BM``,
-and where reconstruction runs, is commissioning work still to be done.
+  So raw data now lands on Sojourner as it is collected. The earlier
+  commissioning path ``/local/vieworks_test`` is no longer in use.
+- ``/gdata`` is **not** mounted on ``radon``. DMagic runs there, because
+  the Data Management subcommands need ``/dm/19bm``, so the host that
+  manages the experiment cannot see the files the detector writes.
+- ``dmagic.conf`` names ``tomodata2`` as ``data-host`` and
+  ``/data2/19BM`` as ``data-top-dir``, which is not where data is
+  actually being written.
+
+Reconciling the DMagic configuration with the direct ``/gdata`` mount --
+and deciding whether ``daq-start`` / ``upload`` are needed at all now
+that the detector writes to Sojourner directly -- is commissioning work
+still to be done.
 
 
 Configuration
@@ -121,9 +125,9 @@ Configuration
 ``globus-server-uuid``            ``5a7ce40f-75c4-4bdd-a1e7-8246054afc02``
 ``globus-message-file``           ``message-19bm.txt``
 ``tomoscan-prefix``               ``19bm:TomoScan:``
-``data-host``                     ``tomo3``
+``data-host``                     ``tomodata2``
 ``data-top-dir``                  ``/data2/19BM/``
-``dm-direct-mount``               ``False``
+``dm-direct-mount``               ``True``
 ================================  ==========================================
 
 Scheduling credentials live in ``~/.scheduling_credentials`` as a single

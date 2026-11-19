@@ -12,7 +12,16 @@ user interface (GUI) or from Python using
 
 To start the main 19-BM tomography control screen, run::
 
-  [factuser@hounsfield ~]$ start_tomo
+  [factuser@radon ~]$ start_tomo
+
+``start_tomo`` also takes the camera a scan should use::
+
+  [factuser@radon ~]$ start_tomo orca
+  [factuser@radon ~]$ start_tomo vieworks
+
+With no argument it opens on whichever camera tomoscan is already set
+to. With one, it switches tomoscan to that camera before opening -- see
+*Choosing the camera* below.
 
 .. image:: ../img/mct_main.png
    :width: 720px
@@ -25,43 +34,41 @@ To start the main 19-BM tomography control screen, run::
    **At 19-BM that is not always the case** — some panels are blank by
    design, because the hardware is not installed yet.
 
-   The hexapod moved from 7-BM in October 2026 and is now ``19bmHXP:``;
-   the centering pair on top of the rotary is ``19bmSoft:m21`` and
-   ``m22``. Both were placeholders (``19bmTODO:``) until then, and any
-   panel still naming that prefix is one whose hardware has not arrived.
+   Panels naming a real prefix — ``19bmSoft:``, ``19bmHXP:``, ``ORCA:``,
+   ``19bmVieworks:``, ``19bm:TomoScan:``, ``19bm:BLEPS:`` — *should* be
+   populated. If one of those is blank, the IOC behind it is down. Use
+   the ``IOCs`` button to check, start or stop it.
 
-   Panels naming a real prefix — ``19bmSoft:``, ``19bmVieworks:``,
-   ``19bm:TomoScan:``, ``19bm:BLEPS:`` — *should* be populated. If one
-   of those is blank, the IOC behind it is down. Use the ``IOCs``
-   button to check, start or stop it.
+   Two blanks are expected rather than faults. Only one camera IOC is
+   normally running, so the other camera's panel is empty. And the ORCA
+   serves no ``Proc1`` plugin, so the flat-field correction fields are
+   blank whenever it is the selected camera.
 
-.. important::
+.. note::
 
-   Open the screen on ``hounsfield``, not on ``radon``.
+   **The screen can be opened on either ``radon`` or ``hounsfield``.**
+   Both resolve every IOC reliably -- measured 2026-11-18, 14 of 14
+   searches from each host for the camera, tomoScan and motor IOCs.
 
-   ``hounsfield`` sits on the private beamline subnet (10.54.129.x)
-   alongside the IOCs, so its Channel Access searches are broadcast and
-   reach every IOC. ``radon`` is on the public network and must address
-   the IOC host by unicast -- and because ``19bmVieworks`` and
-   ``tomoScanApp`` both run on ``orco`` and both bind CA search port
-   5064, the kernel delivers each unicast search to only one of them.
-   Roughly half the searches therefore reach the wrong IOC and time out,
-   so panels go blank at random, differently on each restart. Measured
-   from ``radon``: 7 of 14 searches succeeded for each IOC. From
-   ``hounsfield``: 14 of 14.
+   This page previously said to use ``hounsfield`` only. That advice
+   came from the detectors running on ``orco``, where two IOCs shared
+   Channel Access port 5064 and unicast searches from the public network
+   reached only one of them. The detectors now run on ``factdetector``
+   on separate ports and the problem is gone.
 
-   This is why a blank panel is not by itself proof that an IOC is down.
+   If panels do go blank, the first thing to check is the directory
+   service rather than the IOCs::
+
+       ssh hounsfield 'pgrep -a caDirServ'
 
 Note that MEDM runs each button's command on whatever machine MEDM
-itself is running on. Opening the screen on ``hounsfield`` therefore
-also puts ImageJ and the camera image stream there. Full frames still
-cross the network from ``orco``; if that ever becomes a bottleneck,
-opening the screen on ``orco`` keeps the stream local to the machine
-holding the camera.
+itself is running on, so opening the screen on ``radon`` also puts
+ImageJ and the image stream there. Full frames cross the network from
+``factdetector``; if that ever becomes a bottleneck, opening the screen
+on ``factdetector`` keeps the stream local to the camera.
 
-One exception: DMagic's Data Management subcommands need ``/dm/19bm``,
-which is mounted on ``radon`` but not on ``hounsfield``. Run those from
-``radon`` -- see :doc:`../ops/item_003`.
+DMagic's Data Management subcommands need ``/dm/19bm``, which is mounted
+on ``radon`` -- see :doc:`../ops/item_003`.
 
 
 What the screen provides
@@ -82,14 +89,18 @@ What the screen provides
        swapout, operating mode, shutter status, and the Operations
        message board.
    * - Camera
-     - Detector status and control, exposure, acquisition, frame size,
-       and flat-field correction. ``Detector`` opens the ADEuresys
-       screen, ``ImageJ`` opens the image viewer.
+     - Detector status and control, exposure, acquisition and frame
+       size, with the camera's prefix shown at the top and a
+       ``Scan uses`` readback of the camera tomoscan will actually
+       drive. ``Detector`` offers both cameras; ``ImageJ`` opens the
+       image viewer. Flat-field correction is Vieworks-only.
    * - User Info / Optics
      - ``19bm:TomoScan:`` metadata written into the data files.
    * - Bottom
      - Motor panels: the rotation stage, the four white-beam slit
-       blades, and placeholders for stages not yet installed.
+       blades, the visible-optics stages and the six hexapod axes.
+       ``Slit motors``, ``Hexapod motors`` and ``Filters`` open their
+       own screens.
 
 .. warning::
 
@@ -120,16 +131,19 @@ state:
 
    * - Row
      - What it runs
+   * - Orca IOC
+     - The Hamamatsu ORCA Fire camera IOC, on ``factdetector``
    * - Vieworks 61MP IOC
-     - The camera IOC, on ``orco``
+     - The Vieworks VP-61MX camera IOC, on ``factdetector``
    * - TomoScan IOC
-     - The tomoScan soft IOC, on ``orco``
+     - The tomoScan soft IOC, on ``factdetector``
    * - TomoScan server
      - The Python server that drives it — reads *Running* when up
    * - Hexapod IOC
-     - **Not yet in service.** The hexapod is still to be moved from
-       7-BM and has no address assigned, so this row stays blank and
-       its buttons do nothing.
+     - ``19bmHXP`` on ``hounsfield``, driving the Aerotech Automation1.
+       The IOC is in service; its **status field stays blank** because
+       the record that field watches does not exist on this hexapod.
+       Use ``softIOC Hexapod status`` to check it instead.
 
 This is the panel to reach for when a field on the main screen is
 blank and the prefix is a real one — see the note under the screenshot
@@ -166,13 +180,46 @@ thresholds, and the full PV inventory.
 Detector
 ========
 
-The ``Detector`` button in the Camera panel opens the ADEuresys screen
-for the Vieworks VP-61MX:
+The ``Detector`` button in the Camera panel offers both cameras.
+
+**Vieworks VP-61MX** opens the ADEuresys screen:
 
 .. image:: ../img/vieworks.png
    :width: 720px
    :align: center
    :alt: vieworks
+
+**ORCA C16240** opens a screen built for that camera. The ORCA IOC is
+not areaDetector -- it serves a subset of the usual records -- so the
+screen carries what this camera does offer (sensor temperature and
+cooler status, acquisition frame rate, trigger source, image flips) and
+omits what it does not, including ``DetectorState``, ``StatusMessage``
+and the statistics plugin.
+
+Choosing the camera
+===================
+
+Which camera a scan uses is not a property of this screen: it is the
+``19bm:TomoScan:CameraPVPrefix`` PV, read by the Python server when it
+starts. The ``Scan uses`` field in the Camera panel shows it.
+
+To change it, pass the camera to ``start_tomo``::
+
+  [factuser@radon ~]$ start_tomo orca
+
+That writes the prefix PVs **and restarts the Python server**, because
+the server only reads them at startup. It refuses while a scan is
+running and if the target camera's IOC is not answering.
+
+.. warning::
+
+   Changing the camera does not change the optics records.
+   ``CameraObjective``, ``DetectorPixelSize`` and ``ImagePixelSize`` in
+   the Optics panel are written into every data file and are **not**
+   updated automatically. Check they describe the camera in use before
+   collecting: the two cameras have different sensor pitches and sit
+   behind different objectives, so a stale value puts a wrong pixel
+   size into the file and from there into the reconstruction.
 
 
 Viewing the live image
@@ -192,7 +239,9 @@ Select **Plugins → EPICS_areaDetector → EPICS NTNDA Viewer**:
    :align: center
    :alt: ImageJ_02
 
-Set the channel name to ``19bmVieworks:Pva1:Image`` and press **Start**:
+Set the channel name and press **Start**. The channel depends on the
+camera: ``19bmVieworks:Pva1:Image`` for the Vieworks, or
+``ORCA:image1:ArrayData`` for the ORCA.
 
 .. image:: ../img/ImageJ_03.png
    :width: 720px

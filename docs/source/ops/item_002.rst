@@ -14,8 +14,8 @@ Ops Commissioning is the responsibility of the CRRT, working with Health
 Physics, Floor Coordinators, and beamline staff. Technical and
 scientific commissioning — testing beamline systems with beam, and the
 first experiments — follow afterwards and are the responsibility of the
-beamline staff. First light in the new beamline configuration is
-targeted for the 2026-3 beam cycle.
+beamline staff. That work is in progress: the beamline is in
+scientific commissioning.
 
 Document
 --------

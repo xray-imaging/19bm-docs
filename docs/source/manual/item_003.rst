@@ -14,14 +14,9 @@ To start the main 19-BM tomography control screen, run::
 
   [factuser@radon ~]$ start_tomo
 
-``start_tomo`` also takes the camera a scan should use::
-
-  [factuser@radon ~]$ start_tomo orca
-  [factuser@radon ~]$ start_tomo vieworks
-
-With no argument it opens on whichever camera tomoscan is already set
-to. With one, it switches tomoscan to that camera before opening -- see
-*Choosing the camera* below.
+It takes no arguments and changes nothing: it opens the screen and
+exits. Both cameras appear on it -- see *Choosing the camera* below for
+how the detector in use is selected.
 
 .. image:: ../img/mct_main.png
    :width: 720px
@@ -203,13 +198,22 @@ Which camera a scan uses is not a property of this screen: it is the
 ``19bm:TomoScan:CameraPVPrefix`` PV, read by the Python server when it
 starts. The ``Scan uses`` field in the Camera panel shows it.
 
-To change it, pass the camera to ``start_tomo``::
+Both cameras are shown on the screen side by side. Only the selected
+one displays values; the other reads white, which is expected rather
+than a fault. A green outline marks the one in use.
 
-  [factuser@radon ~]$ start_tomo orca
+**Changing it is a deliberate operation for the beamline scientist, not
+something the screen does.** It means stopping whatever needs stopping,
+setting ``CameraPVPrefix`` and ``FilePluginPVPrefix`` to the new camera,
+restarting the tomoScan Python server so it re-reads them, and starting
+whatever the new detector needs. ``start_tomo`` will not do any of this
+-- it only opens the screen.
 
-That writes the prefix PVs **and restarts the Python server**, because
-the server only reads them at startup. It refuses while a scan is
-running and if the target camera's IOC is not answering.
+.. note::
+
+   The flat-field fields are Vieworks-only. The ORCA serves no ``Proc1``
+   plugin, so they stay blank whenever it is the selected camera. That
+   is expected, not a fault.
 
 .. warning::
 
